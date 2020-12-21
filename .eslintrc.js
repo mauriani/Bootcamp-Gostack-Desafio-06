@@ -28,5 +28,8 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'arrow-body-style': 0,
     'no-console': 'off',
+    'import/default': 2,
+    camelcase: 'off',
+    'import/imports-first': ['warn', 'DISABLE-absolute-first'],
   },
 };
