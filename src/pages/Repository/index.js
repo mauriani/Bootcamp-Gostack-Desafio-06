@@ -21,9 +21,7 @@ export default class Repository extends Component {
   render() {
     const {url} = this.state;
     return (
-      <Container>
-        <WebView source={{uri: url}} style={{flex: 1}} />
-      </Container>
+      <WebView source={{uri: url}} style={{flex: 1, alignSelf: 'stretch'}} />
     );
   }
 }
