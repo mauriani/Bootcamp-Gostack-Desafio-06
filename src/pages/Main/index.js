@@ -1,21 +1,58 @@
 import React, {Component} from 'react';
-import {Keyboard} from 'react-native';
+import PropTypes from 'prop-types';
+import {Keyboard, ActivityIndicator} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import api from '../../services/api';
 
-import {Container, Form, Input, SubmitButton} from './styles';
+import {
+  Container,
+  Form,
+  Input,
+  SubmitButton,
+  List,
+  User,
+  Avatar,
+  Name,
+  Bio,
+  ProfileButton,
+  ProfileButtonText,
+} from './styles';
 
 export default class Main extends Component {
+  static PropTypes = {
+    navigation: PropTypes.shape({
+      navigate: PropTypes.func,
+    }).isRequired,
+  };
   constructor(props) {
     super(props);
     this.state = {
       users: [],
       newUser: '',
+      loading: false,
     };
+  }
+
+  // Componente para buscar os dados
+  async componentDidMount() {
+    const users = await AsyncStorage.getItem('users');
+    if (users) {
+      this.setState({users: JSON.parse(users)});
+    }
+  }
+
+  async componentDidUpdate(_, prevState) {
+    const {users} = this.state;
+    if (prevState.users != users) {
+      await AsyncStorage.setItem('users', JSON.stringify(users));
+    }
   }
 
   handleAddUser = async () => {
     const {users, newUser} = this.state;
+
+    this.setState({loading: true});
 
     const response = await api.get(`/users/${newUser}`);
 
@@ -29,12 +66,22 @@ export default class Main extends Component {
     this.setState({
       users: [...users, data],
       newUser: '',
+      loading: false,
     });
     // faz o teclado sumir
     Keyboard.dismiss();
   };
+
+  handleNavigate = (user) => {
+    const {navigation} = this.props;
+    const name = user.name;
+
+    navigation.navigate('User', {user});
+
+    console.tron.log(name);
+  };
   render() {
-    const {users} = this.state;
+    const {users, newUser, loading} = this.state;
     return (
       <Container>
         <Form>
@@ -46,10 +93,29 @@ export default class Main extends Component {
             returnKeyType="send"
             onSubmitEditing={this.handleAddUser}
           />
-          <SubmitButton onPress={this.handleAddUser}>
-            <Icon name="add" color="#fff" size={20} />
+          <SubmitButton loading={loading} onPress={this.handleAddUser}>
+            {loading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Icon name="add" color="#fff" size={20} />
+            )}
           </SubmitButton>
         </Form>
+
+        <List
+          data={users}
+          keyExtractor={(user) => user.login}
+          renderItem={({item}) => (
+            <User>
+              <Avatar source={{uri: item.avatar}}></Avatar>
+              <Name>{item.name}</Name>
+              <Bio>{item.bio}</Bio>
+              <ProfileButton onPress={() => this.handleNavigate(item)}>
+                <ProfileButtonText>Ver Perfil</ProfileButtonText>
+              </ProfileButton>
+            </User>
+          )}
+        />
       </Container>
     );
   }
