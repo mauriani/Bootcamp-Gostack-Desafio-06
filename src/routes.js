@@ -7,6 +7,7 @@ const Stack = createStackNavigator();
 // importações das pages
 import Main from './pages/Main';
 import User from './pages/User';
+import Repository from './pages/Repository';
 
 export default function Routes() {
   return (
@@ -29,6 +30,12 @@ export default function Routes() {
         <Stack.Screen
           name="User"
           component={User}
+          options={({route}) => ({title: route.params.user.name})}
+        />
+
+        <Stack.Screen
+          name="Repository"
+          component={Repository}
           options={({route}) => ({title: route.params.user.name})}
         />
       </Stack.Navigator>

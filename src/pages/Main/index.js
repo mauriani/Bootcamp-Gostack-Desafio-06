@@ -74,11 +74,8 @@ export default class Main extends Component {
 
   handleNavigate = (user) => {
     const {navigation} = this.props;
-    const name = user.name;
 
     navigation.navigate('User', {user});
-
-    console.tron.log(name);
   };
   render() {
     const {users, newUser, loading} = this.state;
