@@ -41,3 +41,5 @@ Atualização de lista quando o usuário arrastar para baixo.
 ### 4. WebView
 
 Foi adicionado uma webView para que quando o usuário pressione o reposirório possa visualizar.
+
+### Resultado
