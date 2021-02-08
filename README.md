@@ -1,6 +1,6 @@
-# bootcamp-gostack-desafio-06
+# GitHub - Mobile
 
-Nesse desafio foram adicionadas algumas funcionalidades, tais como descritas abaixo:
+Esse projeto faz parte do desafio 06 do bootcamp, nele foram adicionadas algumas funcionalidades, tais como descritas abaixo:
 
 ### 1. Loading de repositórios
 
